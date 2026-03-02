@@ -5,7 +5,7 @@ from psycopg import sql
 DB = dict(
     dbname="db_dwh",
     user="postgres",
-    password="JamesRoot4697!",
+    password="***",
     host="localhost",
     port=5432
 )
