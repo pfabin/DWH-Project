@@ -9,7 +9,7 @@ conn = psycopg.connect(
     port=5432,
     dbname="db_dwh",
     user="postgres",
-    password="JamesRoot4697!",
+    password="***",
     autocommit=True
 )
 
