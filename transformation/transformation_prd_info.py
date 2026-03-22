@@ -11,7 +11,7 @@ conn = psycopg.connect(
     port=5432,
     dbname="db_dwh",
     user="postgres",
-    password="JamesRoot4697!",
+    password="***",
     autocommit=True
 )
 
@@ -29,8 +29,8 @@ df = pd.read_sql_query(
 # Cleaning
 # ==============================
 
-df["sales_key"] = df["prd_key"].astype(str).str[6:]
-df["prd_key"] = df["prd_key"].str[:5].str.replace("-", "_")
+df["category_id"] = df["prd_key"].str[:5].str.replace("-", "_")
+df["prd_key"] = df["prd_key"].astype(str).str[6:]
 
 df["prd_cost"] = df["prd_cost"].fillna(0)
 
@@ -75,12 +75,12 @@ cur.execute(f"""
     CREATE TABLE transformation.{table_name} (
         prd_id INT,
         prd_key VARCHAR(10),
-        sales_key VARCHAR(10),
         prd_nm VARCHAR(50),
-        prd_line VARCHAR(10),
         prd_cost FLOAT,
+        prd_line VARCHAR(10),
         prd_start_dt DATE,
-        prd_end_dt DATE
+        prd_end_dt DATE,
+        category_id VARCHAR(10)
     );
 """)
 
@@ -93,7 +93,7 @@ with open(csv_file, "r", encoding="utf-8") as f:
     with cur.copy(f"""
         COPY transformation.{table_name}
         (prd_id, prd_key, prd_nm, prd_cost, prd_line,
-         prd_start_dt, prd_end_dt, sales_key)
+         prd_start_dt, prd_end_dt, category_id)
         FROM STDIN WITH CSV HEADER
     """) as copy:
         copy.write(f.read())
